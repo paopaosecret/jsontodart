@@ -1,7 +1,7 @@
 <idea-plugin>
-  <id>com.xander.plugin.jsontodart</id>
+  <id>com.xander.plugin.jsontodart11</id>
   <name>JsonToDartByXander</name>
-  <version>1.0</version>
+  <version>1.1</version>
   <vendor email="xander@58.com" url="http://www.58.com">Xander</vendor>
 
   <description><![CDATA[
