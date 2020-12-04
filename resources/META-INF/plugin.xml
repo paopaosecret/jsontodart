@@ -1,0 +1,40 @@
+<idea-plugin>
+  <id>com.xander.plugin.jsontodart</id>
+  <name>JsonToDartByXander</name>
+  <version>1.0</version>
+  <vendor email="xander@58.com" url="http://www.58.com">Xander</vendor>
+
+  <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <em>most HTML tags may be used</em>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="105.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+    <action id="jsontodart.Json2Dart" class="com.xander.plugin.Json2Dart" text="Json to dart"
+            description="Json generate dart class">
+      <add-to-group group-id="CodeMenu" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl CLOSE_BRACKET"/>
+    </action>
+  </actions>
+
+</idea-plugin>
