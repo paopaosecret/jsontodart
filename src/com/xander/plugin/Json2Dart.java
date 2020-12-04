@@ -3,6 +3,7 @@ package com.xander.plugin;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 
@@ -15,5 +16,15 @@ public class Json2Dart extends AnAction {
     public void actionPerformed(AnActionEvent event) {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         Messages.showMessageDialog(project, "Generated Success!", "Json2Dart", Messages.getInformationIcon());
+    }
+
+    @Override
+    public void update(AnActionEvent e) {
+        Editor editor = e.getData(PlatformDataKeys.EDITOR);
+        if(editor != null){
+            e.getPresentation().setEnabled(true);
+        }else {
+            e.getPresentation().setEnabled(false);
+        }
     }
 }
