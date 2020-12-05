@@ -29,7 +29,7 @@ public class DartField {
     /**
      * 类型
      */
-    public static enum Type{
+    public enum Type{
         Basic,
         Map,
         List,
