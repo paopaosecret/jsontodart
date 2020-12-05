@@ -7,13 +7,11 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiFile;
 import com.xander.plugin.core.CodeFactory;
 import com.xander.plugin.ui.CustomDialog;
 import com.xander.plugin.utils.ClassUtils;
-import com.xander.plugin.utils.FileUtils;
-
-import java.util.ArrayList;
 
 /**
  * Created by zhaobing04 on 2020/12/4.
@@ -28,7 +26,7 @@ public class Json2Dart extends AnAction {
         CustomDialog dialog = new CustomDialog(psiClazz);
         dialog.setOnGenerateListener((str) -> WriteCommandAction.runWriteCommandAction(project, () -> {
             printInputInfo(file, psiClazz);
-            CodeFactory.generateDartByJson(file, psiClazz, str);
+            CodeFactory.generateDartByJson(file, psiClazz, str, "Auto");
             Messages.showMessageDialog(project, str, "Json2Dart", Messages.getInformationIcon());
         }));
         dialog.pack();
