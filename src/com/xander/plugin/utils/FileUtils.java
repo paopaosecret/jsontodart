@@ -2,6 +2,7 @@ package com.xander.plugin.utils;
 
 import com.intellij.openapi.vfs.VirtualFile;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -72,6 +73,31 @@ public class FileUtils {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 写入字符串到文件       追加方式
+     * @param path     文件路径
+     * @param content  写入的内容
+     */
+    public static void writeStringToFile(String path, String content){
+        File shuchu = new File(path);
+        if(shuchu != null){
+            try {
+                FileWriter fileWriter = new FileWriter(shuchu, true);
+
+                BufferedWriter bw = new BufferedWriter(fileWriter);
+                bw.write("\n");
+                bw.write(content);
+                bw.flush();
+                bw.close();
+                Thread.sleep(100);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
