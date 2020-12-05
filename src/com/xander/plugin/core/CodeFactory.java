@@ -13,6 +13,10 @@ import com.xander.plugin.utils.DartUtils;
 import com.xander.plugin.utils.StringUtils;
 import org.apache.http.util.TextUtils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,14 +100,33 @@ public class CodeFactory {
         sb.append(StringUtils.formatSingleLine(0, "}"));
         System.out.println(sb.toString());
 
-        // 获取元素操作的工厂类
-        PsiElementFactory factory = JavaPsiFacade.getElementFactory(file.getProject());
-        psiClazz.add(factory.createClass(sb.toString()));
+//        // 获取元素操作的工厂类
+//        PsiElementFactory factory = JavaPsiFacade.getElementFactory(file.getProject());
+//        psiClazz.add(factory.createClass(sb.toString()));
+//
+//        // 导入需要的类
+//        JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(file.getProject());
+//        styleManager.optimizeImports(file);
+//        styleManager.shortenClassReferences(psiClazz);
 
-        // 导入需要的类
-        JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(file.getProject());
-        styleManager.optimizeImports(file);
-        styleManager.shortenClassReferences(psiClazz);
+        File shuchu = new File(file.getVirtualFile().getPath());
+        if(shuchu != null){
+            try {
+                FileWriter fileWriter = new FileWriter(shuchu, true);
+
+                BufferedWriter bw = new BufferedWriter(fileWriter);
+                bw.write("\n");
+                bw.write(sb.toString());
+                bw.flush();
+                bw.close();
+                Thread.sleep(100);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     /**

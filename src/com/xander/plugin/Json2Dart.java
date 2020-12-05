@@ -11,7 +11,12 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.xander.plugin.core.CodeFactory;
 import com.xander.plugin.ui.CustomDialog;
+import com.xander.plugin.utils.AndroidUtils;
 import com.xander.plugin.utils.ClassUtils;
+import com.xander.plugin.utils.FileUtils;
+
+import java.awt.*;
+import java.io.File;
 
 /**
  * Created by zhaobing04 on 2020/12/4.
@@ -23,11 +28,15 @@ public class Json2Dart extends AnAction {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         PsiFile file = event.getData(PlatformDataKeys.PSI_FILE);
         PsiClass psiClazz = ClassUtils.getFileClass(file);
-        CustomDialog dialog = new CustomDialog(psiClazz);
+        Component component = event.getData(PlatformDataKeys.CONTEXT_COMPONENT);
+        CustomDialog dialog = new CustomDialog(event, component);
         dialog.setOnGenerateListener((str) -> WriteCommandAction.runWriteCommandAction(project, () -> {
             printInputInfo(file, psiClazz);
+            File shuchu = new File(file.getVirtualFile().getPath());
+            FileUtils.clearInfoForFile(shuchu);
             CodeFactory.generateDartByJson(file, psiClazz, str, "Auto");
-            Messages.showMessageDialog(project, str, "Json2Dart", Messages.getInformationIcon());
+            AndroidUtils.getAppPackageBaseDir(project).refresh(true, true);
+            Messages.showMessageDialog(project, "创建成功，刷新文件夹即可", "提示", Messages.getInformationIcon());
         }));
         dialog.pack();
         dialog.setVisible(true);
@@ -45,6 +54,8 @@ public class Json2Dart extends AnAction {
     public void printInputInfo(PsiFile file, PsiClass psiClazz){
         if(file != null){
             System.out.println(file.getName());
+            System.out.println(file.getContainingDirectory());
+            System.out.println(file.getVirtualFile().getPath());
         }else{
             System.out.println("file = null");
         }
