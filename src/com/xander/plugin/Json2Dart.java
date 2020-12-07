@@ -38,8 +38,7 @@ public class Json2Dart extends AnAction {
                     if(!TextUtils.isEmpty(str) && StringUtils.isJson(str)){
                         FileUtils.clearInfoForFile(shuchu);
                         CodeFactory.generateDartByJson(file, str, TextUtils.isEmpty(className) ? "AutoGen" : className);
-                        VirtualFile apiDir = project.getBaseDir();
-                        VfsUtil.markDirtyAndRefresh(true, true, true, apiDir);
+                        VfsUtil.markDirtyAndRefresh(true, true, true, file);
                         Messages.showMessageDialog(project, "创建成功，刷新文件夹即可", "提示", Messages.getInformationIcon());
                     }else{
                         Messages.showMessageDialog(project, "创建失败,JSON格式异常", "提示", Messages.getInformationIcon());
