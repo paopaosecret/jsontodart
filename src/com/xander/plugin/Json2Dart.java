@@ -14,6 +14,7 @@ import com.xander.plugin.ui.CustomDialog;
 import com.xander.plugin.utils.AndroidUtils;
 import com.xander.plugin.utils.ClassUtils;
 import com.xander.plugin.utils.FileUtils;
+import org.apache.http.util.TextUtils;
 
 import java.awt.*;
 import java.io.File;
@@ -31,13 +32,14 @@ public class Json2Dart extends AnAction {
             PsiClass psiClazz = ClassUtils.getFileClass(file);
             Component component = event.getData(PlatformDataKeys.CONTEXT_COMPONENT);
             CustomDialog dialog = new CustomDialog(event, component);
-            dialog.setOnGenerateListener((str) -> WriteCommandAction.runWriteCommandAction(project, () -> {
+            dialog.setOnGenerateListener((className, str) -> WriteCommandAction.runWriteCommandAction(project, () -> {
                 try{
                     printInputInfo(file, psiClazz);
                     File shuchu = new File(file.getVirtualFile().getPath());
                     FileUtils.clearInfoForFile(shuchu);
-                    CodeFactory.generateDartByJson(file, psiClazz, str, "Auto");
+                    CodeFactory.generateDartByJson(file, psiClazz, str, TextUtils.isEmpty(className) ? "AutoGen" : className);
                     AndroidUtils.getAppPackageBaseDir(project).refresh(true, true);
+                    file.getVirtualFile().refresh(true,true);
                     Messages.showMessageDialog(project, "创建成功，刷新文件夹即可", "提示", Messages.getInformationIcon());
                 }catch (Exception e){}
             }));

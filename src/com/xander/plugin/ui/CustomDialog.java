@@ -14,6 +14,8 @@ public class CustomDialog extends JDialog{
     private JTextArea inputJson;
     private JButton btnOk;
     private JPanel body;
+    private JTextField classNameText;
+
     public CustomDialog(AnActionEvent event, Component baseComponent) {
         //TODO 设置尺寸
         setPreferredSize(new Dimension(600, 400));
@@ -29,7 +31,7 @@ public class CustomDialog extends JDialog{
 
     private void performGenerate() {
         if(onGenerateListener != null) {
-            onGenerateListener.onGenerate(inputJson.getText());
+            onGenerateListener.onGenerate(classNameText.getText().trim(), inputJson.getText().trim());
         }
 
         dispose();
@@ -42,6 +44,6 @@ public class CustomDialog extends JDialog{
     }
 
     public interface OnGenerateListener {
-        void onGenerate(String inputJson);
+        void onGenerate(String className, String inputJson);
     }
 }
