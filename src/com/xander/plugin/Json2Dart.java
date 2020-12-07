@@ -7,7 +7,6 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.xander.plugin.core.CodeFactory;
@@ -21,6 +20,7 @@ import java.io.File;
 
 /**
  * Created by zhaobing04 on 2020/12/4.
+ * JSON2Dart: 实现json 转dart bean的 Aciton
  */
 public class Json2Dart extends AnAction {
 
@@ -30,7 +30,7 @@ public class Json2Dart extends AnAction {
             Project project = event.getData(PlatformDataKeys.PROJECT);
             VirtualFile file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
             Component component = event.getData(PlatformDataKeys.CONTEXT_COMPONENT);
-            CustomDialog dialog = new CustomDialog(event, component);
+            CustomDialog dialog = new CustomDialog(component);
             dialog.setOnGenerateListener((className, str) -> WriteCommandAction.runWriteCommandAction(project, () -> {
                 try{
                     printInputInfo(file);
@@ -48,16 +48,6 @@ public class Json2Dart extends AnAction {
             dialog.pack();
             dialog.setVisible(true);
         }catch (Exception e){}
-
-//        for (PsiElement psiElement : file.getChildren()) {
-//            System.out.println(psiElement);
-//            if(psiElement instanceof PsiClass){
-//                PsiClass clazz = (PsiClass) psiElement;
-//                PsiMethod method = clazz.getMethods()[0];
-//                System.out.println(method.getName());
-//                System.out.println(method.getParameterList().getText());
-//            }
-//        }
     }
 
     public void printInputInfo(VirtualFile file){

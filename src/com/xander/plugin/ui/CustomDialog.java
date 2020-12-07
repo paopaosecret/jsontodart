@@ -1,11 +1,7 @@
 package com.xander.plugin.ui;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.xander.plugin.utils.UIUtils;
-
 import javax.swing.*;
 import java.awt.*;
-
 
 /**
  * Created by zhaobing04 on 2020/12/4.
@@ -16,25 +12,32 @@ public class CustomDialog extends JDialog{
     private JPanel body;
     private JTextField classNameText;
 
-    public CustomDialog(AnActionEvent event, Component baseComponent) {
-        //TODO 设置尺寸
-        setPreferredSize(new Dimension(600, 400));
+    public CustomDialog(Component baseComponent) {
+        try{
+            //TODO 设置尺寸
+            setPreferredSize(new Dimension(600, 400));
 
-        //TODO 设置窗口居中显示
-        setLocation(UIUtils.getScreenWidth()/2 - 300, UIUtils.getScreenHeight()/2 - 200);
-        setLocationRelativeTo(baseComponent);
-        setContentPane(body);
-        setModal(true);
-        btnOk.addActionListener(e -> performGenerate());
-        btnOk.addActionListener(e -> dispose());
+            //TODO 设置窗口居中显示
+            setLocation(0, 0);
+            if(baseComponent != null){
+                setLocationRelativeTo(null);
+            }
+            setContentPane(body);
+            btnOk.addActionListener(e -> performGenerate());
+        }catch (Exception e){
+
+        }
+
     }
 
     private void performGenerate() {
-        if(onGenerateListener != null) {
-            onGenerateListener.onGenerate(classNameText.getText().trim(), inputJson.getText().trim());
+        try {
+            if(onGenerateListener != null) {
+                onGenerateListener.onGenerate(classNameText.getText().trim(), inputJson.getText().trim());
+            }
+            dispose();
+        }catch (Exception e){
         }
-
-        dispose();
     }
 
     private OnGenerateListener onGenerateListener;
