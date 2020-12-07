@@ -7,13 +7,13 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiFile;
+import com.intellij.openapi.util.UserDataHolderBase;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.xander.plugin.core.CodeFactory;
 import com.xander.plugin.ui.CustomDialog;
-import com.xander.plugin.utils.AndroidUtils;
-import com.xander.plugin.utils.ClassUtils;
 import com.xander.plugin.utils.FileUtils;
+import com.xander.plugin.utils.StringUtils;
 import org.apache.http.util.TextUtils;
 
 import java.awt.*;
@@ -28,19 +28,22 @@ public class Json2Dart extends AnAction {
     public void actionPerformed(AnActionEvent event) {
         try{
             Project project = event.getData(PlatformDataKeys.PROJECT);
-            PsiFile file = event.getData(PlatformDataKeys.PSI_FILE);
-            PsiClass psiClazz = ClassUtils.getFileClass(file);
+            VirtualFile file = event.getData(PlatformDataKeys.VIRTUAL_FILE);
             Component component = event.getData(PlatformDataKeys.CONTEXT_COMPONENT);
             CustomDialog dialog = new CustomDialog(event, component);
             dialog.setOnGenerateListener((className, str) -> WriteCommandAction.runWriteCommandAction(project, () -> {
                 try{
-                    printInputInfo(file, psiClazz);
-                    File shuchu = new File(file.getVirtualFile().getPath());
-                    FileUtils.clearInfoForFile(shuchu);
-                    CodeFactory.generateDartByJson(file, psiClazz, str, TextUtils.isEmpty(className) ? "AutoGen" : className);
-                    AndroidUtils.getAppPackageBaseDir(project).refresh(true, true);
-                    file.getVirtualFile().refresh(true,true);
-                    Messages.showMessageDialog(project, "创建成功，刷新文件夹即可", "提示", Messages.getInformationIcon());
+                    printInputInfo(file);
+                    File shuchu = new File(file.getPath());
+                    if(!TextUtils.isEmpty(str) && StringUtils.isJson(str)){
+                        FileUtils.clearInfoForFile(shuchu);
+                        CodeFactory.generateDartByJson(file, str, TextUtils.isEmpty(className) ? "AutoGen" : className);
+                        VirtualFile apiDir = project.getBaseDir();
+                        VfsUtil.markDirtyAndRefresh(true, true, true, apiDir);
+                        Messages.showMessageDialog(project, "创建成功，刷新文件夹即可", "提示", Messages.getInformationIcon());
+                    }else{
+                        Messages.showMessageDialog(project, "创建失败,JSON格式异常", "提示", Messages.getInformationIcon());
+                    }
                 }catch (Exception e){}
             }));
             dialog.pack();
@@ -58,18 +61,12 @@ public class Json2Dart extends AnAction {
 //        }
     }
 
-    public void printInputInfo(PsiFile file, PsiClass psiClazz){
+    public void printInputInfo(VirtualFile file){
         if(file != null){
             System.out.println(file.getName());
-            System.out.println(file.getContainingDirectory());
-            System.out.println(file.getVirtualFile().getPath());
+            System.out.println(file.getPath());
         }else{
             System.out.println("file = null");
-        }
-        if(psiClazz != null){
-            System.out.println(psiClazz.getQualifiedName() + ", name = " + psiClazz.getName());
-        }else{
-            System.out.println("psiClazz = null");
         }
     }
 

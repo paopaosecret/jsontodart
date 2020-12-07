@@ -1,6 +1,9 @@
 package com.xander.plugin.utils;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.apache.http.util.TextUtils;
+import org.codehaus.jettison.json.JSONObject;
 
 import java.util.Locale;
 
@@ -65,5 +68,24 @@ public class StringUtils {
             sb.append(sbWord.toString());
         }
         return sb.toString();
+    }
+
+    public static boolean isJson(String content) {
+        if(TextUtils.isEmpty(content)){
+            return false;
+        }
+        try {
+            //TODO 创建json解析器
+            JsonParser parse = new JsonParser();
+            JsonElement jsonElement = parse.parse(content);
+            if(jsonElement.isJsonObject()){
+                return true;
+            }else if(jsonElement.isJsonArray()){
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }
