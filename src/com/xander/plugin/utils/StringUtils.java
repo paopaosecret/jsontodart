@@ -3,7 +3,6 @@ package com.xander.plugin.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.apache.http.util.TextUtils;
-import org.codehaus.jettison.json.JSONObject;
 
 import java.util.Locale;
 
